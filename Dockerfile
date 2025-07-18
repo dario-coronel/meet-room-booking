@@ -4,6 +4,9 @@ FROM python:3.11-slim
 # Add Python scripts directory to PATH
 ENV PATH="$PATH:/root/.local/bin"
 
+# Set PYTHONPATH so 'src' is recognized as a package
+ENV PYTHONPATH=/app
+
 # Set working directory
 WORKDIR /app
 

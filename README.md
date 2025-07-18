@@ -31,6 +31,8 @@ meet-room-booking/
 │   ├── services/
 │   ├── repositories/
 │   ├── patterns/
+│   ├── utils/
+│   ├── __init__.py
 │   └── main.py
 ├── test/
 ├── requirements.txt
