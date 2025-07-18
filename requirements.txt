@@ -1,0 +1,5 @@
+# Core dependencies (currently using only standard library)
+# Add external packages here if needed
+
+# For testing (optional)
+pytest
