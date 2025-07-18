@@ -22,7 +22,9 @@ def print_menu():
     print("4. View bookings by user")
     print("5. View bookings by room")
     print("6. List all users and rooms")
-    print("7. Exit")
+    print("7. Delete a booking")
+    print("8. View bookings by date")
+    print("9. Exit")
 
 def main():
     room_repo = RoomRepository()
@@ -153,6 +155,49 @@ def main():
                 print("No rooms available.")
 
         elif choice == "7":
+            bookings = booking_repo.bookings
+            if not bookings:
+                print("No bookings available.")
+                continue
+
+            print("\n=== Existing Bookings ===")
+            for b in bookings:
+                print(f"ID: {b.booking_id} - Room: {b.room.name}, User: {b.user.name}, {b.start_time} → {b.end_time}")
+
+            try:
+                booking_id = int(input("\nEnter booking ID to delete: "))
+                booking = booking_repo.get_by_id(booking_id)
+                if not booking:
+                    print("❌ Booking not found.")
+                    continue
+
+                confirm = input(f"Are you sure you want to delete booking #{booking_id}? (y/n): ").lower()
+                if confirm == "y":
+                    deleted = booking_service.delete_booking(booking_id)
+                    print("✅ Booking deleted.")
+                else:
+                    print("❌ Deletion cancelled.")
+            except ValueError:
+                print("❌ Invalid input.")
+
+        elif choice == "8":
+            date_str = input("Enter date (YYYY-MM-DD): ")
+            try:
+                target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
+                bookings = [
+                    b for b in booking_repo.bookings
+                    if b.start_time.date() == target_date
+                ]
+                if bookings:
+                    print(f"\nBookings on {target_date}:")
+                    for b in bookings:
+                        print(f"ID: {b.booking_id} - Room: {b.room.name}, User: {b.user.name}, {b.start_time} → {b.end_time}")
+                else:
+                    print("No bookings found on that date.")
+            except ValueError:
+                print("❌ Invalid date format.")
+
+        elif choice == "9":
             print("Goodbye!")
             break
 

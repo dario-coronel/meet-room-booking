@@ -1,0 +1,20 @@
+[
+  {
+    "room_id": 1,
+    "name": "Star",
+    "capacity": 20,
+    "location": "PB"
+  },
+  {
+    "room_id": 2,
+    "name": "Cloud",
+    "capacity": 30,
+    "location": "1st Floor"
+  },
+  {
+    "room_id": 3,
+    "name": "Room B",
+    "capacity": 20,
+    "location": "Floor 2"
+  }
+]

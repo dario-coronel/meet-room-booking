@@ -1,0 +1,8 @@
+[
+  {
+    "room_id": 1,
+    "name": "Room B",
+    "capacity": 20,
+    "location": "Floor 2"
+  }
+]

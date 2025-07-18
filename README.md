@@ -15,10 +15,14 @@
 ✔️ User management  
 ✔️ Meeting room management  
 ✔️ Booking creation with time slot validation (no overlaps)  
+✔️ Booking deletion and filtering by date  
 ✔️ View bookings by user or room  
-✔️ Modular architecture: models, services, repositories, patterns  
+✔️ Data persistence using JSON files  
+✔️ Validation for date formats and time ranges  
+✔️ Modular architecture: models, services, repositories, patterns, utils  
 ✔️ Console-based interactive menu  
-✔️ Docker-ready deployment
+✔️ Docker-ready deployment  
+✔️ Comprehensive unit tests for all core features
 
 ---
 
@@ -30,11 +34,12 @@ meet-room-booking/
 │   ├── models/
 │   ├── services/
 │   ├── repositories/
+│   ├── data/
 │   ├── patterns/
 │   ├── utils/
 │   ├── __init__.py
 │   └── main.py
-├── test/
+├── tests/
 ├── requirements.txt
 ├── Dockerfile
 └── README.md
@@ -87,7 +92,10 @@ docker run -it meet-room-booking
 
 ## 🧪 Testing
 
-Unit tests should be placed in the `test/` directory.
+Unit tests are located in the `tests/` directory and cover:
+- Booking creation, deletion, and overlap prevention
+- Room and user management
+- Date and time validation
 
 To run tests:
 ```bash
