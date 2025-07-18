@@ -8,6 +8,11 @@ from src.services.user_service import UserService
 from src.services.booking_service import BookingService
 
 from src.patterns.no_overlap_strategy import NoOverlapStrategy
+from src.utils.datetime_validator import (
+    parse_datetime,
+    validate_datetime_range,
+    validate_not_in_past
+)
 
 def print_menu():
     print("\n=== Meeting Room Booking System ===")
@@ -16,7 +21,8 @@ def print_menu():
     print("3. Make a booking")
     print("4. View bookings by user")
     print("5. View bookings by room")
-    print("6. Exit")
+    print("6. List all users and rooms")
+    print("7. Exit")
 
 def main():
     room_repo = RoomRepository()
@@ -45,8 +51,26 @@ def main():
             print(f"Room created: {room}")
 
         elif choice == "3":
+            users = user_service.get_all_users()
+            rooms = room_service.get_all_rooms()
+
+            if not users:
+                print("No users available. Please create a user first.")
+                continue
+            if not rooms:
+                print("No rooms available. Please create a room first.")
+                continue
+
+            print("\nAvailable Users:")
+            for user in users:
+                print(f"ID: {user.user_id} - {user.name} ({user.email})")
+
+            print("\nAvailable Rooms:")
+            for room in rooms:
+                print(f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})")
+
             try:
-                user_id = int(input("Enter user ID: "))
+                user_id = int(input("\nEnter user ID: "))
                 room_id = int(input("Enter room ID: "))
                 start_str = input("Enter start time (YYYY-MM-DD HH:MM): ")
                 end_str = input("Enter end time (YYYY-MM-DD HH:MM): ")
@@ -58,27 +82,77 @@ def main():
                     print("Invalid user or room ID.")
                     continue
 
-                start_time = datetime.strptime(start_str, "%Y-%m-%d %H:%M")
-                end_time = datetime.strptime(end_str, "%Y-%m-%d %H:%M")
+                start_time = parse_datetime(start_str)
+                end_time = parse_datetime(end_str)
+
+                if not validate_datetime_range(start_time, end_time):
+                    print("❌ Start time must be before end time.")
+                    continue
+
+                if not validate_not_in_past(start_time):
+                    print("❌ Start time must be in the future.")
+                    continue
 
                 booking = booking_service.create_booking(room, user, start_time, end_time)
-                print(f"Booking created: {booking}")
+                print(f"\n✅ Booking created:\n{booking}")
             except Exception as e:
-                print(f"Error: {e}")
+                print(f"\n❌ Error: {e}")
 
         elif choice == "4":
-            user_id = int(input("Enter user ID: "))
+            users = user_service.get_all_users()
+            if not users:
+                print("No users available.")
+                continue
+
+            print("\nAvailable Users:")
+            for user in users:
+                print(f"ID: {user.user_id} - {user.name} ({user.email})")
+
+            user_id = int(input("\nEnter user ID to view bookings: "))
             bookings = booking_service.get_bookings_by_user(user_id)
-            for b in bookings:
-                print(b)
+            if bookings:
+                for b in bookings:
+                    print(b)
+            else:
+                print("No bookings found for this user.")
 
         elif choice == "5":
-            room_id = int(input("Enter room ID: "))
+            rooms = room_service.get_all_rooms()
+            if not rooms:
+                print("No rooms available.")
+                continue
+
+            print("\nAvailable Rooms:")
+            for room in rooms:
+                print(f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})")
+
+            room_id = int(input("\nEnter room ID to view bookings: "))
             bookings = booking_service.get_bookings_by_room(room_id)
-            for b in bookings:
-                print(b)
+            if bookings:
+                for b in bookings:
+                    print(b)
+            else:
+                print("No bookings found for this room.")
 
         elif choice == "6":
+            users = user_service.get_all_users()
+            rooms = room_service.get_all_rooms()
+
+            print("\n=== Users ===")
+            if users:
+                for user in users:
+                    print(f"ID: {user.user_id} - {user.name} ({user.email})")
+            else:
+                print("No users available.")
+
+            print("\n=== Rooms ===")
+            if rooms:
+                for room in rooms:
+                    print(f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})")
+            else:
+                print("No rooms available.")
+
+        elif choice == "7":
             print("Goodbye!")
             break
 

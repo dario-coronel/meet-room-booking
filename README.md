@@ -1,72 +1,99 @@
-# Meeting Room Booking System
-
-This is a Python-based console application designed to manage meeting room bookings in an office environment. It follows Object-Oriented Programming principles and implements the Strategy Design Pattern to validate booking time slots.
+<div align="center">
+  <h1>📅 Meeting Room Booking System</h1>
+  <p>
+    <img src="https://img.shields.io/badge/python-3.11%2B-blue.svg" alt="Python Version">
+    <img src="https://img.shields.io/badge/docker-ready-blue.svg" alt="Docker Ready">
+    <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  </p>
+  <p>A Python console application to manage meeting room bookings in an office environment.</p>
+</div>
 
 ---
 
 ## 🚀 Features
 
-- Create and manage users
-- Create and manage meeting rooms
-- Make bookings with time slot validation (no overlapping)
-- View bookings by user or by room
-- Modular architecture with models, services, repositories, and patterns
-- Console-based interactive menu
-- Ready for Docker deployment
+✔️ User management  
+✔️ Meeting room management  
+✔️ Booking creation with time slot validation (no overlaps)  
+✔️ View bookings by user or room  
+✔️ Modular architecture: models, services, repositories, patterns  
+✔️ Console-based interactive menu  
+✔️ Docker-ready deployment
 
 ---
 
 ## 📁 Project Structure
-meeting-room-booking/ 
-├── src/ │   
-├── models/ 
-│   ├── services/ 
-│   ├── repositories/ 
-│   ├── patterns/ 
-│   └── main.py 
-├── tests/ 
-├── requirements.txt 
-├── Dockerfile 
-└── README.md
 
+```text
+meet-room-booking/
+├── src/
+│   ├── models/
+│   ├── services/
+│   ├── repositories/
+│   ├── patterns/
+│   └── main.py
+├── test/
+├── requirements.txt
+├── Dockerfile
+└── README.md
+```
 
 ---
 
 ## 🧰 Requirements
 
 - Python 3.11+
-- pip (Python package manager)
+- pip
 
 ---
 
-## ⚙️ Installation
+## ⚙️ Installation & Usage
 
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/your-username/meeting-room-booking.git
-   cd meeting-room-booking
+### 1️⃣ Clone the repository
+```bash
+git clone https://github.com/your-username/meet-room-booking.git
+cd meet-room-booking
+```
 
-2. Install dependencies:
-
+### 2️⃣ Install dependencies
+```bash
 pip install -r requirements.txt
+```
 
-3. Run the application:
-
+### 3️⃣ Run the application
+```bash
 python src/main.py
+```
 
-🐳 Docker Setup (Optional)To run the application inside a Docker container:
+---
 
-1.  Build the image:
+## 🐳 Docker Setup
 
-docker build -t meeting-room-booking 
+To run the application in Docker:
 
-2.  Run the container:
+### 1️⃣ Build the image
+```bash
+docker build -t meet-room-booking .
+```
 
-docker run -it meeting-room-booking
+### 2️⃣ Run the container
+```bash
+docker run -it meet-room-booking
+```
 
+---
 
-🧪 Testing
+## 🧪 Testing
 
-Unit tests will be located in the tests/ directory. To run tests:
+Unit tests should be placed in the `test/` directory.
 
-python -m unittest discover tests
+To run tests:
+```bash
+pytest
+```
+
+---
+
+## 📖 License
+
+This project is licensed under the MIT License.
