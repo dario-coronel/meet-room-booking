@@ -1,6 +1,8 @@
 from abc import ABC, abstractmethod
 from datetime import datetime
+
 from src.models.booking import Booking
+
 
 class TimeValidationStrategy(ABC):
     @abstractmethod

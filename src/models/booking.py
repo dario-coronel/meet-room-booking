@@ -1,9 +1,18 @@
 from datetime import datetime
+
 from src.models.room import Room
 from src.models.user import User
 
+
 class Booking:
-    def __init__(self, booking_id: int, room: Room, user: User, start_time: datetime, end_time: datetime):
+    def __init__(
+        self,
+        booking_id: int,
+        room: Room,
+        user: User,
+        start_time: datetime,
+        end_time: datetime,
+    ):
         self.booking_id = booking_id
         self.room = room
         self.user = user

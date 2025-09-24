@@ -1,9 +1,11 @@
 import json
 import os
 from datetime import datetime
+
 from src.models.booking import Booking
 from src.models.room import Room
 from src.models.user import User
+
 
 class BookingRepository:
     def __init__(self, filepath="src/data/bookings.json"):
@@ -12,7 +14,9 @@ class BookingRepository:
         self.next_id = 1
         self.load_from_file()
 
-    def add(self, room: Room, user: User, start_time: datetime, end_time: datetime) -> Booking:
+    def add(
+        self, room: Room, user: User, start_time: datetime, end_time: datetime
+    ) -> Booking:
         booking = Booking(self.next_id, room, user, start_time, end_time)
         self.bookings.append(booking)
         self.next_id += 1
@@ -46,7 +50,7 @@ class BookingRepository:
                         room=Room(**b["room"]),
                         user=User(**b["user"]),
                         start_time=datetime.fromisoformat(b["start_time"]),
-                        end_time=datetime.fromisoformat(b["end_time"])
+                        end_time=datetime.fromisoformat(b["end_time"]),
                     )
                     for b in data
                 ]
@@ -55,13 +59,17 @@ class BookingRepository:
 
     def save_to_file(self):
         with open(self.filepath, "w") as f:
-            json.dump([
-                {
-                    "booking_id": b.booking_id,
-                    "room": b.room.__dict__,
-                    "user": b.user.__dict__,
-                    "start_time": b.start_time.isoformat(),
-                    "end_time": b.end_time.isoformat()
-                }
-                for b in self.bookings
-            ], f, indent=2)
+            json.dump(
+                [
+                    {
+                        "booking_id": b.booking_id,
+                        "room": b.room.__dict__,
+                        "user": b.user.__dict__,
+                        "start_time": b.start_time.isoformat(),
+                        "end_time": b.end_time.isoformat(),
+                    }
+                    for b in self.bookings
+                ],
+                f,
+                indent=2,
+            )

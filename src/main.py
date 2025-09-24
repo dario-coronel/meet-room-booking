@@ -1,18 +1,16 @@
 from datetime import datetime
-from src.repositories.room_repository import RoomRepository
-from src.repositories.user_repository import UserRepository
-from src.repositories.booking_repository import BookingRepository
-
-from src.services.room_service import RoomService
-from src.services.user_service import UserService
-from src.services.booking_service import BookingService
 
 from src.patterns.no_overlap_strategy import NoOverlapStrategy
-from src.utils.datetime_validator import (
-    parse_datetime,
-    validate_datetime_range,
-    validate_not_in_past
-)
+from src.repositories.booking_repository import BookingRepository
+from src.repositories.room_repository import RoomRepository
+from src.repositories.user_repository import UserRepository
+from src.services.booking_service import BookingService
+from src.services.room_service import RoomService
+from src.services.user_service import UserService
+from src.utils.datetime_validator import (parse_datetime,
+                                          validate_datetime_range,
+                                          validate_not_in_past)
+
 
 def print_menu():
     print("\n=== Meeting Room Booking System ===")
@@ -25,6 +23,7 @@ def print_menu():
     print("7. Delete a booking")
     print("8. View bookings by date")
     print("9. Exit")
+
 
 def main():
     room_repo = RoomRepository()
@@ -69,7 +68,9 @@ def main():
 
             print("\nAvailable Rooms:")
             for room in rooms:
-                print(f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})")
+                print(
+                    f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})"
+                )
 
             try:
                 user_id = int(input("\nEnter user ID: "))
@@ -95,7 +96,9 @@ def main():
                     print("❌ Start time must be in the future.")
                     continue
 
-                booking = booking_service.create_booking(room, user, start_time, end_time)
+                booking = booking_service.create_booking(
+                    room, user, start_time, end_time
+                )
                 print(f"\n✅ Booking created:\n{booking}")
             except Exception as e:
                 print(f"\n❌ Error: {e}")
@@ -126,7 +129,9 @@ def main():
 
             print("\nAvailable Rooms:")
             for room in rooms:
-                print(f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})")
+                print(
+                    f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})"
+                )
 
             room_id = int(input("\nEnter room ID to view bookings: "))
             bookings = booking_service.get_bookings_by_room(room_id)
@@ -150,7 +155,9 @@ def main():
             print("\n=== Rooms ===")
             if rooms:
                 for room in rooms:
-                    print(f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})")
+                    print(
+                        f"ID: {room.room_id} - {room.name} (Capacity: {room.capacity}, Location: {room.location})"
+                    )
             else:
                 print("No rooms available.")
 
@@ -162,7 +169,9 @@ def main():
 
             print("\n=== Existing Bookings ===")
             for b in bookings:
-                print(f"ID: {b.booking_id} - Room: {b.room.name}, User: {b.user.name}, {b.start_time} → {b.end_time}")
+                print(
+                    f"ID: {b.booking_id} - Room: {b.room.name}, User: {b.user.name}, {b.start_time} → {b.end_time}"
+                )
 
             try:
                 booking_id = int(input("\nEnter booking ID to delete: "))
@@ -171,7 +180,9 @@ def main():
                     print("❌ Booking not found.")
                     continue
 
-                confirm = input(f"Are you sure you want to delete booking #{booking_id}? (y/n): ").lower()
+                confirm = input(
+                    f"Are you sure you want to delete booking #{booking_id}? (y/n): "
+                ).lower()
                 if confirm == "y":
                     deleted = booking_service.delete_booking(booking_id)
                     print("✅ Booking deleted.")
@@ -185,13 +196,16 @@ def main():
             try:
                 target_date = datetime.strptime(date_str, "%Y-%m-%d").date()
                 bookings = [
-                    b for b in booking_repo.bookings
+                    b
+                    for b in booking_repo.bookings
                     if b.start_time.date() == target_date
                 ]
                 if bookings:
                     print(f"\nBookings on {target_date}:")
                     for b in bookings:
-                        print(f"ID: {b.booking_id} - Room: {b.room.name}, User: {b.user.name}, {b.start_time} → {b.end_time}")
+                        print(
+                            f"ID: {b.booking_id} - Room: {b.room.name}, User: {b.user.name}, {b.start_time} → {b.end_time}"
+                        )
                 else:
                     print("No bookings found on that date.")
             except ValueError:
@@ -203,6 +217,7 @@ def main():
 
         else:
             print("Invalid option. Please try again.")
+
 
 if __name__ == "__main__":
     main()

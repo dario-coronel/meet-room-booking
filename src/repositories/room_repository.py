@@ -1,6 +1,8 @@
 import json
 import os
+
 from src.models.room import Room
+
 
 class RoomRepository:
     def __init__(self, filepath="src/data/rooms.json"):

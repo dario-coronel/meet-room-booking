@@ -1,10 +1,14 @@
-from src.models.booking import Booking
-from src.repositories.booking_repository import BookingRepository
-from src.patterns.time_validation_strategy import TimeValidationStrategy
 from datetime import datetime
 
+from src.models.booking import Booking
+from src.patterns.time_validation_strategy import TimeValidationStrategy
+from src.repositories.booking_repository import BookingRepository
+
+
 class BookingService:
-    def __init__(self, repository: BookingRepository, validator: TimeValidationStrategy):
+    def __init__(
+        self, repository: BookingRepository, validator: TimeValidationStrategy
+    ):
         self.repository = repository
         self.validator = validator
 

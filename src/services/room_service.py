@@ -1,5 +1,6 @@
 from src.repositories.room_repository import RoomRepository
 
+
 class RoomService:
     def __init__(self, repository: RoomRepository):
         self.repository = repository

@@ -1,6 +1,8 @@
 import json
 import os
+
 from src.models.user import User
+
 
 class UserRepository:
     def __init__(self, filepath="src/data/users.json"):

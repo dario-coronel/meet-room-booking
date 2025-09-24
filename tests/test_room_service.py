@@ -1,6 +1,7 @@
 from src.repositories.room_repository import RoomRepository
 from src.services.room_service import RoomService
 
+
 def test_create_room():
     repo = RoomRepository(filepath="src/data/test_rooms.json")
     repo.rooms = []
