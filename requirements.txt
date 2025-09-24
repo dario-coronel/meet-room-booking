@@ -1,20 +1,19 @@
-# Core dependencies (currently using only standard library)
-# Add external packages here if needed
+# Core dependencies (add your project dependencies here)
 
-# For testing
+# Testing dependencies
 pytest>=7.0.0
 pytest-html>=3.1.0
 pytest-cov>=4.0.0
 coverage>=7.0.0
 
-# For code quality and pre-commit hooks
+# Code quality and linting
 pre-commit>=3.0.0
 black>=23.0.0
 isort>=5.12.0
 flake8>=6.0.0
 pylint>=2.17.0
 
-# For building
+# Build dependencies
 build>=0.10.0
 setuptools>=65.0.0
 wheel>=0.40.0
