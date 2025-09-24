@@ -113,7 +113,9 @@ def create_booking():
         start_time = datetime.fromisoformat(data["start_time"])
         end_time = datetime.fromisoformat(data["end_time"])
 
-        booking = booking_service.create_booking(room, user, start_time, end_time)
+        booking = booking_service.create_booking(
+            room, user, start_time, end_time
+        )
 
         if booking:
             return (
@@ -190,9 +192,9 @@ def delete_booking(booking_id):
 
         if booking_to_delete.user.name != user_name:
             return (
-                jsonify(
-                    {"error": ("Permission denied - booking belongs to another user")}
-                ),
+                jsonify({
+                    "error": "Permission denied - not your booking"
+                }),
                 403,
             )
 
