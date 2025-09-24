@@ -31,3 +31,6 @@ class BookingService:
 
     def delete_booking(self, booking_id: int):
         return self.repository.delete(booking_id)
+
+    def get_all_bookings(self):
+        return self.repository.get_all()
