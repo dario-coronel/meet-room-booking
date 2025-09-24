@@ -47,3 +47,4 @@ class HealthController:
                 "error": str(e),
             }
             return {"data": error_response, "status_code": 200}
+
