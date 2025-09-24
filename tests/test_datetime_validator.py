@@ -2,9 +2,11 @@ from datetime import datetime, timedelta
 
 import pytest
 
-from src.utils.datetime_validator import (parse_datetime,
-                                          validate_datetime_range,
-                                          validate_not_in_past)
+from src.utils.datetime_validator import (
+    parse_datetime,
+    validate_datetime_range,
+    validate_not_in_past,
+)
 
 
 def test_parse_valid_datetime():
