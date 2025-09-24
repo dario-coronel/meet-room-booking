@@ -101,7 +101,10 @@ To run tests:
 ```bash
 pytest
 ```
+# Meet Room Booking
 
+[![CI Pipeline](https://github.com/dario-coronel/meet-room-booking/actions/workflows/ci.yml/badge.svg)](https://github.com/dario-coronel/meet-room-booking/actions/workflows/ci.yml)
+[![Coverage](https://codecov.io/gh/dario-coronel/meet-room-booking/branch/main/graph/badge.svg)](https://codecov.io/gh/dario-coronel/meet-room-booking)
 ---
 
 ## 📖 License
