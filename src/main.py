@@ -31,7 +31,7 @@ def create_user(user_service):
     print("\n--- Create User ---")
     name = input("Enter name: ")
     email = input("Enter email: ")
-    
+
     try:
         user = user_service.create_user(name, email)
         print(f"User created successfully: {user}")
@@ -53,7 +53,7 @@ def create_room(room_service):
     print("\n--- Create Room ---")
     name = input("Enter room name: ")
     capacity = input("Enter capacity: ")
-    
+
     try:
         capacity = int(capacity)
         room = room_service.create_room(name, capacity)
@@ -69,52 +69,47 @@ def list_rooms(room_service):
         print("No rooms found.")
     else:
         for room in rooms:
-            print(
-                f"ID: {room.id}, Name: {room.name}, "
-                f"Capacity: {room.capacity}"
-            )
+            print(f"ID: {room.id}, Name: {room.name}, " f"Capacity: {room.capacity}")
 
 
 def make_booking(booking_service, user_service, room_service):
     print("\n--- Make Booking ---")
-    
+
     # Show available users
     users = user_service.get_all_users()
     if not users:
         print("No users available. Create a user first.")
         return
-    
+
     print("Available users:")
     for user in users:
         print(f"ID: {user.id}, Name: {user.name}")
-    
+
     # Show available rooms
     rooms = room_service.get_all_rooms()
     if not rooms:
         print("No rooms available. Create a room first.")
         return
-    
+
     print("\nAvailable rooms:")
     for room in rooms:
         print(f"ID: {room.id}, Name: {room.name}")
-    
+
     try:
         user_id = int(input("\nEnter user ID: "))
         room_id = int(input("Enter room ID: "))
         start_time_str = input("Enter start time (YYYY-MM-DD HH:MM): ")
         end_time_str = input("Enter end time (YYYY-MM-DD HH:MM): ")
-        
+
         start_time = parse_datetime(start_time_str)
         end_time = parse_datetime(end_time_str)
-        
+
         validate_not_in_past(start_time)
         validate_datetime_range(start_time, end_time)
-        
-        booking = booking_service.create_booking(
-            user_id, room_id, start_time, end_time
-        )
+
+        booking = booking_service.create_booking(user_id, room_id, start_time, end_time)
         print(f"Booking created successfully: {booking}")
-        
+
     except ValueError as e:
         print(f"Error: {e}")
 
@@ -135,13 +130,13 @@ def list_bookings(booking_service):
 
 def cancel_booking(booking_service):
     print("\n--- Cancel Booking ---")
-    
+
     # Show current bookings
     bookings = booking_service.get_all_bookings()
     if not bookings:
         print("No bookings found.")
         return
-    
+
     print("Current bookings:")
     for booking in bookings:
         print(
@@ -149,12 +144,12 @@ def cancel_booking(booking_service):
             f"Room: {booking.room_id}, "
             f"Start: {booking.start_time}, End: {booking.end_time}"
         )
-    
+
     try:
         booking_id = int(input("\nEnter booking ID to cancel: "))
         booking_service.cancel_booking(booking_id)
         print("Booking cancelled successfully!")
-        
+
     except ValueError as e:
         print(f"Error: {e}")
 
@@ -163,18 +158,16 @@ def main():
     # Initialize repositories
     user_repository = UserRepository()
     room_repository = RoomRepository()
-    
+
     # Initialize services
     user_service = UserService(user_repository)
     room_service = RoomService(room_repository)
-    booking_service = BookingService(
-        user_repository, room_repository
-    )
-    
+    booking_service = BookingService(user_repository, room_repository)
+
     while True:
         print_menu()
         choice = input("\nEnter your choice (1-8): ")
-        
+
         if choice == "1":
             create_user(user_service)
         elif choice == "2":
