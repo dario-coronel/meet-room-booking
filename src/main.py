@@ -7,9 +7,11 @@ from src.repositories.user_repository import UserRepository
 from src.services.booking_service import BookingService
 from src.services.room_service import RoomService
 from src.services.user_service import UserService
-from src.utils.datetime_validator import (parse_datetime,
-                                          validate_datetime_range,
-                                          validate_not_in_past)
+from src.utils.datetime_validator import (
+    parse_datetime,
+    validate_datetime_range,
+    validate_not_in_past,
+)
 
 
 def print_menu():
