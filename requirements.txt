@@ -3,3 +3,10 @@
 
 # For testing (optional)
 pytest
+
+# For code quality and pre-commit hooks
+pre-commit
+black
+isort
+flake8
+pylint
