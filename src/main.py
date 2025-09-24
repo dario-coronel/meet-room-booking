@@ -1,8 +1,3 @@
-from datetime import datetime
-
-from src.models.booking import Booking
-from src.models.room import Room
-from src.models.user import User
 from src.repositories.room_repository import RoomRepository
 from src.repositories.user_repository import UserRepository
 from src.services.booking_service import BookingService
