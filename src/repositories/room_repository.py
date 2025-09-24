@@ -19,7 +19,9 @@ class RoomRepository:
         return room
 
     def get_by_id(self, room_id: int) -> Room:
-        return next((room for room in self.rooms if room.room_id == room_id), None)
+        return next(
+            (room for room in self.rooms if room.room_id == room_id), None
+        )
 
     def get_all(self) -> list:
         return self.rooms

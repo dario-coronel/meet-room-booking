@@ -7,5 +7,6 @@ class Room:
 
     def __str__(self):
         return (
-            f"Room {self.name} (Capacity: {self.capacity}, Location: {self.location})"
+            f"Room {self.name} "
+            f"(Capacity: {self.capacity}, Location: {self.location})"
         )

@@ -64,7 +64,10 @@ def list_rooms(room_service):
         print("No rooms found.")
     else:
         for room in rooms:
-            print(f"ID: {room.id}, Name: {room.name}, " f"Capacity: {room.capacity}")
+            print(
+                f"ID: {room.id}, Name: {room.name}, "
+                f"Capacity: {room.capacity}"
+            )
 
 
 def make_booking(booking_service, user_service, room_service):
@@ -102,7 +105,9 @@ def make_booking(booking_service, user_service, room_service):
         validate_not_in_past(start_time)
         validate_datetime_range(start_time, end_time)
 
-        booking = booking_service.create_booking(user_id, room_id, start_time, end_time)
+        booking = booking_service.create_booking(
+            user_id, room_id, start_time, end_time
+        )
         print(f"Booking created successfully: {booking}")
 
     except ValueError as e:

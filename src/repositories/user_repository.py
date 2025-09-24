@@ -19,7 +19,9 @@ class UserRepository:
         return user
 
     def get_by_id(self, user_id: int) -> User:
-        return next((user for user in self.users if user.user_id == user_id), None)
+        return next(
+            (user for user in self.users if user.user_id == user_id), None
+        )
 
     def get_all(self) -> list:
         return self.users

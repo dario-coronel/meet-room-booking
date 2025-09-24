@@ -11,7 +11,7 @@ project_root = Path(__file__).parent
 sys.path.insert(0, str(project_root))
 
 # Now we can import from src
-from src.app import app
+from src.app import app  # noqa: E402
 
 if __name__ == "__main__":
     print("🚀 Starting Meet Room Booking API...")

@@ -24,7 +24,9 @@ class BookingRepository:
         return booking
 
     def get_by_id(self, booking_id: int) -> Booking:
-        return next((b for b in self.bookings if b.booking_id == booking_id), None)
+        return next(
+            (b for b in self.bookings if b.booking_id == booking_id), None
+        )
 
     def get_all(self) -> list:
         return self.bookings

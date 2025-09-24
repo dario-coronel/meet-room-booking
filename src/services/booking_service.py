@@ -12,7 +12,9 @@ class BookingService:
         self.repository = repository
         self.validator = validator
 
-    def create_booking(self, room, user, start_time: datetime, end_time: datetime):
+    def create_booking(
+        self, room, user, start_time: datetime, end_time: datetime
+    ):
         # Create a temporary booking object (not yet added to repo)
         temp_booking = Booking(-1, room, user, start_time, end_time)
         existing_bookings = self.repository.get_by_room(room.room_id)
