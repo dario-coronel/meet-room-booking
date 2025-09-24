@@ -100,7 +100,10 @@ jobs:
             htmlcov/
             coverage.xml
 
-      - name: Upload Coverage to Codecov (Optional)
+      
+            
+      - name: Upload Coverage to Codecov
+              codecov token=$CODECOV_TOKEN
         uses: codecov/codecov-action@v3
         with:
           file: ./coverage.xml
