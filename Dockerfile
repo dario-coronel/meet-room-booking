@@ -16,5 +16,5 @@ COPY . .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the application
-CMD ["python", "src/main.py"]
+# Run the console application as a module to ensure package imports work
+CMD ["python", "-m", "src.main"]

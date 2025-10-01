@@ -32,6 +32,10 @@ class BookingRepository:
     def get_by_room(self, room_id: int) -> list:
         return [b for b in self.bookings if b.room.room_id == room_id]
 
+    def get_all(self) -> list:
+        """Return all bookings."""
+        return self.bookings
+
     def delete(self, booking_id: int) -> bool:
         booking = self.get_by_id(booking_id)
         if booking:

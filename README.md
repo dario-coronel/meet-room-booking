@@ -67,9 +67,14 @@ cd meet-room-booking
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Run the application
-```bash
-python src/main.py
+### 3️⃣ Ejecutar la aplicación (modo recomendado)
+```powershell
+# Si usás entorno virtual en Windows:
+& .\.venv\Scripts\Activate.ps1
+python -m src.main
+
+# O simplemente:
+python -m src.main
 ```
 
 ---
@@ -86,6 +91,7 @@ docker build -t meet-room-booking .
 ### 2️⃣ Run the container
 ```bash
 docker run -it meet-room-booking
+# El contenedor ejecuta la app de consola con 'python -m src.main'
 ```
 
 ---

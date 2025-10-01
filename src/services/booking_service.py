@@ -1,14 +1,12 @@
 from datetime import datetime
+from typing import Any
 
 from src.models.booking import Booking
-from src.patterns.time_validation_strategy import TimeValidationStrategy
 from src.repositories.booking_repository import BookingRepository
 
 
 class BookingService:
-    def __init__(
-        self, repository: BookingRepository, validator: TimeValidationStrategy
-    ):
+    def __init__(self, repository: BookingRepository, validator: Any):
         self.repository = repository
         self.validator = validator
 
@@ -29,5 +27,12 @@ class BookingService:
     def get_bookings_by_room(self, room_id: int):
         return self.repository.get_by_room(room_id)
 
+    def get_all_bookings(self):
+        return self.repository.get_all()
+
     def delete_booking(self, booking_id: int):
         return self.repository.delete(booking_id)
+
+    # Convenience alias expected by CLI
+    def cancel_booking(self, booking_id: int):
+        return self.delete_booking(booking_id)

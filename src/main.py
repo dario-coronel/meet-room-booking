@@ -1,3 +1,5 @@
+from src.patterns.no_overlap_strategy import NoOverlapStrategy
+from src.repositories.booking_repository import BookingRepository
 from src.repositories.room_repository import RoomRepository
 from src.repositories.user_repository import UserRepository
 from src.services.booking_service import BookingService
@@ -41,17 +43,18 @@ def list_users(user_service):
         print("No users found.")
     else:
         for user in users:
-            print(f"ID: {user.id}, Name: {user.name}, Email: {user.email}")
+            print(f"ID: {user.user_id}, Name: {user.name}, " f"Email: {user.email}")
 
 
 def create_room(room_service):
     print("\n--- Create Room ---")
     name = input("Enter room name: ")
     capacity = input("Enter capacity: ")
+    location = input("Enter location: ")
 
     try:
         capacity = int(capacity)
-        room = room_service.create_room(name, capacity)
+        room = room_service.create_room(name, capacity, location)
         print(f"Room created successfully: {room}")
     except ValueError as e:
         print(f"Error: {e}")
@@ -64,7 +67,9 @@ def list_rooms(room_service):
         print("No rooms found.")
     else:
         for room in rooms:
-            print(f"ID: {room.id}, Name: {room.name}, " f"Capacity: {room.capacity}")
+            print(
+                f"ID: {room.room_id}, Name: {room.name}, " f"Capacity: {room.capacity}"
+            )
 
 
 def make_booking(booking_service, user_service, room_service):
@@ -78,7 +83,7 @@ def make_booking(booking_service, user_service, room_service):
 
     print("Available users:")
     for user in users:
-        print(f"ID: {user.id}, Name: {user.name}")
+        print(f"ID: {user.user_id}, Name: {user.name}")
 
     # Show available rooms
     rooms = room_service.get_all_rooms()
@@ -88,7 +93,7 @@ def make_booking(booking_service, user_service, room_service):
 
     print("\nAvailable rooms:")
     for room in rooms:
-        print(f"ID: {room.id}, Name: {room.name}")
+        print(f"ID: {room.room_id}, Name: {room.name}")
 
     try:
         user_id = int(input("\nEnter user ID: "))
@@ -99,10 +104,17 @@ def make_booking(booking_service, user_service, room_service):
         start_time = parse_datetime(start_time_str)
         end_time = parse_datetime(end_time_str)
 
-        validate_not_in_past(start_time)
-        validate_datetime_range(start_time, end_time)
+        if not validate_not_in_past(start_time):
+            raise ValueError("Start time must be in the future.")
+        if not validate_datetime_range(start_time, end_time):
+            raise ValueError("End time must be after start time.")
+        # Resolve entities
+        user = user_service.repository.get_by_id(user_id)
+        room = room_service.repository.get_by_id(room_id)
+        if user is None or room is None:
+            raise ValueError("Invalid user or room ID.")
 
-        booking = booking_service.create_booking(user_id, room_id, start_time, end_time)
+        booking = booking_service.create_booking(room, user, start_time, end_time)
         print(f"Booking created successfully: {booking}")
 
     except ValueError as e:
@@ -117,9 +129,10 @@ def list_bookings(booking_service):
     else:
         for booking in bookings:
             print(
-                f"ID: {booking.id}, User: {booking.user_id}, "
-                f"Room: {booking.room_id}, "
-                f"Start: {booking.start_time}, End: {booking.end_time}"
+                f"ID: {booking.booking_id}, User: {booking.user.user_id}, "
+                f"Room: {booking.room.room_id}, "
+                f"Start: {booking.start_time}, "
+                f"End: {booking.end_time}"
             )
 
 
@@ -135,9 +148,10 @@ def cancel_booking(booking_service):
     print("Current bookings:")
     for booking in bookings:
         print(
-            f"ID: {booking.id}, User: {booking.user_id}, "
-            f"Room: {booking.room_id}, "
-            f"Start: {booking.start_time}, End: {booking.end_time}"
+            f"ID: {booking.booking_id}, User: {booking.user.user_id}, "
+            f"Room: {booking.room.room_id}, "
+            f"Start: {booking.start_time}, "
+            f"End: {booking.end_time}"
         )
 
     try:
@@ -153,11 +167,12 @@ def main():
     # Initialize repositories
     user_repository = UserRepository()
     room_repository = RoomRepository()
+    booking_repository = BookingRepository()
 
     # Initialize services
     user_service = UserService(user_repository)
     room_service = RoomService(room_repository)
-    booking_service = BookingService(user_repository, room_repository)
+    booking_service = BookingService(booking_repository, NoOverlapStrategy())
 
     while True:
         print_menu()
