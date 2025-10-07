@@ -67,7 +67,9 @@ cd meet-room-booking
 pip install -r requirements.txt
 ```
 
-### 3️⃣ Ejecutar la aplicación (modo recomendado)
+### 3️⃣ Ejecutar la aplicación
+
+#### Modo consola (aplicación original):
 ```powershell
 # Si usás entorno virtual en Windows:
 & .\.venv\Scripts\Activate.ps1
@@ -75,6 +77,25 @@ python -m src.main
 
 # O simplemente:
 python -m src.main
+```
+
+#### Modo servidor web (con endpoint /health):
+```powershell
+# Si usás entorno virtual en Windows:
+& .\.venv\Scripts\Activate.ps1
+python run_web.py
+
+# La aplicación estará disponible en:
+# http://127.0.0.1:5000/health
+```
+
+#### Endpoint de salud:
+El servidor web expone un endpoint de monitoreo en `GET /health` que devuelve:
+```json
+{
+  "status": "ok", 
+  "timestamp": "2025-10-02T10:30:00Z"
+}
 ```
 
 ---
@@ -90,8 +111,12 @@ docker build -t meet-room-booking .
 
 ### 2️⃣ Run the container
 ```bash
-docker run -it meet-room-booking
-# El contenedor ejecuta la app de consola con 'python -m src.main'
+# Modo web (default):
+docker run -p 5000:5000 meet-room-booking
+# Acceder a: http://localhost:5000/health
+
+# Modo consola:
+docker run -it meet-room-booking python -m src.main
 ```
 
 ---

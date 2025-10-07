@@ -16,5 +16,17 @@
     "name": "Room B",
     "capacity": 20,
     "location": "Floor 2"
+  },
+  {
+    "room_id": 4,
+    "name": "Cacatua",
+    "capacity": 30,
+    "location": "Bolivar"
+  },
+  {
+    "room_id": 5,
+    "name": "Sala 5 ",
+    "capacity": 40,
+    "location": "Bolivar"
   }
 ]

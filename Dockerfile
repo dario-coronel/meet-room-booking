@@ -16,5 +16,8 @@ COPY . .
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Run the console application as a module to ensure package imports work
-CMD ["python", "-m", "src.main"]
+# Expose port for web server
+EXPOSE 5000
+
+# Run the web application (can override with console: python -m src.main)
+CMD ["python", "run_web.py"]

@@ -88,6 +88,26 @@ jobs:
             --self-contained-html \
             --junitxml=junit.xml
 
+      - name: Test Health Endpoint Integration
+        run: |
+          # Start web server in background
+          python run_web.py &
+          WEB_PID=$!
+          
+          # Wait for server to start
+          sleep 3
+          
+          # Test health endpoint
+          curl -f http://localhost:5000/health || exit 1
+          
+          # Validate JSON response
+          response=$(curl -s http://localhost:5000/health)
+          echo "Health response: $response"
+          echo $response | python -c "import sys, json; json.load(sys.stdin)" || exit 1
+          
+          # Stop web server
+          kill $WEB_PID
+
       - name: Upload Test Reports
         uses: actions/upload-artifact@v4
         if: always()

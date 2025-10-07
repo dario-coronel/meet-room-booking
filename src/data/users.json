@@ -18,5 +18,15 @@
     "user_id": 4,
     "name": "Richard",
     "email": "richarda@gmail.com"
+  },
+  {
+    "user_id": 5,
+    "name": "emanuel ortega",
+    "email": "ema@gmail.com"
+  },
+  {
+    "user_id": 6,
+    "name": "Pepe Grillo",
+    "email": "grillo@gmail.com"
   }
 ]
