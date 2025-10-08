@@ -6,8 +6,19 @@ from src.database.redis_client import redis_client
 
 
 def create_app():
-    """Create Flask app with health and monitoring endpoints."""
     app = Flask(__name__)
+
+    @app.route("/clear-responses", methods=["DELETE"])
+    def clear_responses():
+        """Elimina todas las respuestas persistidas en Redis o base de datos."""
+        success = redis_client.clear_all_requests()
+        if success:
+            return (
+                jsonify({"message": "All responses have been cleared successfully"}),
+                200,
+            )
+        else:
+            return jsonify({"message": "Failed to clear responses"}), 500
 
     @app.route("/health", methods=["GET"])
     def health():

@@ -7,6 +7,22 @@ import redis
 
 
 class RedisClient:
+    def clear_all_requests(self) -> bool:
+        """Elimina todas las respuestas persistidas en Redis."""
+        if not self.is_connected():
+            return False
+        try:
+            # Eliminar lista general
+            self.client.delete("all_requests")
+            # Eliminar sets de endpoints conocidos
+            self.client.delete("requests:/health")
+            self.client.delete("requests:/ping")
+            # Si hay más endpoints, podrías usar scan y delete por patrón
+            return True
+        except Exception as e:
+            print(f"Error clearing requests in Redis: {e}")
+            return False
+
     """Redis client for storing health check and ping requests."""
 
     def __init__(self):
