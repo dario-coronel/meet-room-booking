@@ -168,6 +168,67 @@ class RedisClient:
             print(f"Error getting stats: {e}")
             return {"connected": False, "error": str(e)}
 
+    def save_token(self, token: str, expiration_seconds: int = 3600) -> bool:
+        """Guarda un token en Redis con expiración opcional.
+
+        Args:
+            token: El token JWT o string a guardar
+            expiration_seconds: Tiempo de expiración en segundos (default: 1 hora)
+
+        Returns:
+            True si se guardó exitosamente, False en caso contrario
+        """
+        if not self.is_connected():
+            return False
+
+        try:
+            key = f"token:{token}"
+            # Guardamos el token con un valor simple y TTL
+            self.client.setex(key, expiration_seconds, "valid")
+            return True
+        except Exception as e:
+            print(f"Error saving token to Redis: {e}")
+            return False
+
+    def validate_token(self, token: str) -> bool:
+        """Verifica si un token existe y es válido en Redis.
+
+        Args:
+            token: El token a validar
+
+        Returns:
+            True si el token existe y es válido, False en caso contrario
+        """
+        if not self.is_connected():
+            return False
+
+        try:
+            key = f"token:{token}"
+            return self.client.exists(key) > 0
+        except Exception as e:
+            print(f"Error validating token: {e}")
+            return False
+
+    def delete_token(self, token: str) -> bool:
+        """Elimina un token de Redis (para logout/invalidación).
+
+        Args:
+            token: El token a eliminar
+
+        Returns:
+            True si se eliminó exitosamente, False en caso contrario
+        """
+        if not self.is_connected():
+            return False
+
+        try:
+            key = f"token:{token}"
+            self.client.delete(key)
+            return True
+        except Exception as e:
+            print(f"Error deleting token: {e}")
+            return False
+
 
 # Global Redis client instance
 redis_client = RedisClient()

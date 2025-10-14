@@ -3,12 +3,14 @@ from datetime import datetime, timezone
 from flask import Flask, jsonify, request
 
 from src.database.redis_client import redis_client
+from src.middleware.auth_middleware import validate_token
 
 
 def create_app():
     app = Flask(__name__)
 
     @app.route("/clear-responses", methods=["DELETE"])
+    @validate_token
     def clear_responses():
         """Elimina todas las respuestas persistidas en Redis o base de datos."""
         success = redis_client.clear_all_requests()
@@ -78,6 +80,7 @@ def create_app():
         )
 
     @app.route("/get-responses", methods=["GET"])
+    @validate_token
     def get_responses():
         """Get all persisted requests from Redis.
 
@@ -105,5 +108,56 @@ def create_app():
             ),
             200,
         )
+
+    @app.route("/register-token", methods=["POST"])
+    def register_token():
+        """Registra un token JWT en Redis para testing.
+
+        Espera un JSON con el campo 'token' y opcionalmente 'expiration_seconds'.
+        Ejemplo:
+        {
+            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+            "expiration_seconds": 3600
+        }
+        """
+        data = request.get_json()
+
+        if not data or "token" not in data:
+            return (
+                jsonify(
+                    {
+                        "error": "Token is required",
+                        "message": "Please provide a 'token' field in the request body",
+                    }
+                ),
+                400,
+            )
+
+        token = data["token"]
+        expiration = data.get("expiration_seconds", 3600)  # Default: 1 hora
+
+        success = redis_client.save_token(token, expiration)
+
+        if success:
+            return (
+                jsonify(
+                    {
+                        "message": "Token registered successfully",
+                        "token": token,
+                        "expiration_seconds": expiration,
+                    }
+                ),
+                201,
+            )
+        else:
+            return (
+                jsonify(
+                    {
+                        "error": "Failed to register token",
+                        "message": "Redis connection error",
+                    }
+                ),
+                500,
+            )
 
     return app
