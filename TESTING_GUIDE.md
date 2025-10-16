@@ -17,10 +17,16 @@ docker-compose ps
 # Ver logs
 docker-compose logs -f app
 
-# Probar endpoints
+# Probar endpoints públicos (sin autenticación)
 curl http://localhost:5000/health
 curl http://localhost:5000/ping
-curl http://localhost:5000/get-responses
+
+# Registrar un token para endpoints protegidos
+curl -X POST http://localhost:5000/register-token -H "Content-Type: application/json" -d '{"token": "test-token-123"}'
+
+# Probar endpoints protegidos (con autenticación)
+curl http://localhost:5000/get-responses -H "Authorization: Bearer test-token-123"
+curl -X DELETE http://localhost:5000/clear-responses -H "Authorization: Bearer test-token-123"
 ```
 
 ---
@@ -44,9 +50,16 @@ python run_web.py
 ### Paso 3: Probar endpoints
 ```powershell
 # Desde otra terminal PowerShell
+
+# Endpoints públicos
 curl http://localhost:5000/health
 curl http://localhost:5000/ping
-curl http://localhost:5000/get-responses
+
+# Registrar token
+curl -X POST http://localhost:5000/register-token -H "Content-Type: application/json" -d '{"token": "test-123"}'
+
+# Endpoints protegidos (con token)
+curl http://localhost:5000/get-responses -H "Authorization: Bearer test-123"
 ```
 
 ---
@@ -93,12 +106,15 @@ curl http://localhost:5000/ping
 
 ### /get-responses
 ```bash
-# Todos los requests
-curl http://localhost:5000/get-responses
+# Primero registrar un token
+curl -X POST http://localhost:5000/register-token -H "Content-Type: application/json" -d '{"token": "my-token"}'
+
+# Todos los requests (requiere autenticación)
+curl http://localhost:5000/get-responses -H "Authorization: Bearer my-token"
 
 # Con límite
-curl "http://localhost:5000/get-responses?limit=5"
+curl "http://localhost:5000/get-responses?limit=5" -H "Authorization: Bearer my-token"
 
 # Filtrar por endpoint
-curl "http://localhost:5000/get-responses?endpoint=/health"
+curl "http://localhost:5000/get-responses?endpoint=/health" -H "Authorization: Bearer my-token"
 ```

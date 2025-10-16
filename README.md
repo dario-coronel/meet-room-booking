@@ -92,45 +92,56 @@ meet-room-booking/
 
 ## ⚙️ Installation & Usage
 
-### 1️⃣ Clone the repository
+### 🚀 Quick Start (Recomendado)
+
+**La forma más rápida de ejecutar el proyecto completo:**
+
 ```bash
-git clone https://github.com/your-username/meet-room-booking.git
+# 1. Clonar el repositorio
+git clone https://github.com/dario-coronel/meet-room-booking.git
 cd meet-room-booking
+
+# 2. Iniciar con Docker Compose (Redis + App)
+docker-compose up -d
+
+# 3. Probar los endpoints
+curl http://localhost:5000/health
+curl http://localhost:5000/ping
+
+# 4. Registrar un token para endpoints protegidos
+curl -X POST http://localhost:5000/register-token \
+  -H "Content-Type: application/json" \
+  -d '{"token": "mi-token-123"}'
+
+# 5. Consultar requests guardados (requiere autenticación)
+curl http://localhost:5000/get-responses \
+  -H "Authorization: Bearer mi-token-123"
 ```
 
-### 2️⃣ Install dependencies
+📖 **Para instrucciones detalladas de ejecución, consulta:** [EJECUCION.md](./EJECUCION.md)
+
+### Otras opciones de ejecución
+
+#### Modo consola (aplicación original de gestión de reservas):
 ```bash
+python -m src.main
+```
+
+#### Modo servidor web local (sin Docker):
+```bash
+# 1. Instalar dependencias
 pip install -r requirements.txt
-```
 
-### 3️⃣ Ejecutar la aplicación
-
-#### Modo consola (aplicación original):
-```powershell
-# Si usás entorno virtual en Windows:
-& .\.venv\Scripts\Activate.ps1
-python -m src.main
-
-# O simplemente:
-python -m src.main
-```
-
-#### Modo servidor web (con endpoint /health y Redis):
-```powershell
-# Primero, levanta Redis con Docker:
+# 2. Iniciar Redis (requiere Docker)
 docker run -d -p 6379:6379 --name redis redis:7-alpine
 
-# Luego, ejecuta la aplicación:
-& .\.venv\Scripts\Activate.ps1
+# 3. Ejecutar la aplicación
 python run_web.py
-
-# La aplicación estará disponible en:
-# http://127.0.0.1:5000/health
-# http://127.0.0.1:5000/ping
-# http://127.0.0.1:5000/get-responses
 ```
 
 #### Endpoints disponibles:
+
+##### Endpoints Públicos (sin autenticación):
 
 **GET /health** - Health check endpoint
 ```json
@@ -149,7 +160,16 @@ python run_web.py
 }
 ```
 
-**GET /get-responses** - Get all stored requests
+**POST /register-token** - Registrar token para autenticación
+```bash
+curl -X POST http://localhost:5000/register-token \
+  -H "Content-Type: application/json" \
+  -d '{"token": "tu-token-aqui", "expiration_seconds": 3600}'
+```
+
+##### Endpoints Protegidos (requieren autenticación con Bearer token):
+
+**GET /get-responses** - Obtener todos los requests guardados
 ```json
 {
   "total_returned": 10,
@@ -172,9 +192,21 @@ python run_web.py
 }
 ```
 
+**Uso con autenticación:**
+```bash
+curl http://localhost:5000/get-responses \
+  -H "Authorization: Bearer tu-token-aqui"
+```
+
 **Query parameters for /get-responses:**
 - `limit` (default: 100): Maximum number of requests to return
 - `endpoint`: Filter by specific endpoint (e.g., `/health` or `/ping`)
+
+**DELETE /clear-responses** - Eliminar todos los requests guardados
+```bash
+curl -X DELETE http://localhost:5000/clear-responses \
+  -H "Authorization: Bearer tu-token-aqui"
+```
 
 ---
 
