@@ -5,7 +5,7 @@ Esta guía te ayudará a ejecutar el proyecto Meeting Room Booking System paso a
 ## 📋 Tabla de Contenidos
 
 1. [Requisitos Previos](#requisitos-previos)
-2. [Opción 1: Ejecución con Docker Compose (Recomendado)](#opción-1-ejecución-con-docker-compose-recomendado)
+2. [Opción 1: Ejecución con Docker Compose (Recomendado)](#opción-1-ejecución-con-docker compose-recomendado)
 3. [Opción 2: Ejecución Local con Redis en Docker](#opción-2-ejecución-local-con-redis-en-docker)
 4. [Opción 3: Solo Aplicación (Sin Redis)](#opción-3-solo-aplicación-sin-redis)
 5. [Uso de la API](#uso-de-la-api)
@@ -41,7 +41,7 @@ cd meet-room-booking
 ### Paso 2: Iniciar los servicios
 
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 Este comando iniciará:
@@ -51,7 +51,7 @@ Este comando iniciará:
 ### Paso 3: Verificar que los servicios estén corriendo
 
 ```bash
-docker-compose ps
+docker compose ps
 ```
 
 Deberías ver algo como:
@@ -65,7 +65,7 @@ meet-room-redis     redis:7-alpine      Up 10 seconds       0.0.0.0:6379->6379/t
 ### Paso 4: Ver los logs de la aplicación
 
 ```bash
-docker-compose logs -f app
+docker compose logs -f app
 ```
 
 ### Paso 5: Probar los endpoints
@@ -83,7 +83,7 @@ curl http://localhost:5000/ping
 ### Paso 6: Detener los servicios
 
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ---
@@ -471,7 +471,7 @@ Este modo no usa Redis y es independiente del servidor web.
 
 - **README.md**: Documentación general del proyecto
 - **TESTING_GUIDE.md**: Guía detallada de pruebas
-- **docker-compose.yml**: Configuración de Docker Compose
+- **docker compose.yml**: Configuración de Docker Compose
 - **requirements.txt**: Dependencias de Python
 
 ---
@@ -514,9 +514,9 @@ Este modo no usa Redis y es independiente del servidor web.
 
 ```bash
 # Iniciar con Docker Compose (Recomendado)
-docker-compose up -d
-docker-compose logs -f
-docker-compose down
+docker compose up -d
+docker compose logs -f
+docker compose down
 
 # Iniciar Redis solo
 docker run -d -p 6379:6379 --name meet-room-redis redis:7-alpine

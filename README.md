@@ -72,7 +72,7 @@ meet-room-booking/
 │   ├── test_health_endpoint.py
 │   ├── test_redis_endpoints.py
 │   └── ...
-├── docker-compose.yml       # Orquestación Docker
+├── docker compose.yml       # Orquestación Docker
 ├── Dockerfile              # Imagen de la aplicación
 ├── run_web.py              # Entrypoint servidor web
 ├── requirements.txt        # Dependencias Python
@@ -102,7 +102,7 @@ git clone https://github.com/dario-coronel/meet-room-booking.git
 cd meet-room-booking
 
 # 2. Iniciar con Docker Compose (Redis + App)
-docker-compose up -d
+docker compose up -d
 
 # 3. Probar los endpoints
 curl http://localhost:5000/health
@@ -216,7 +216,7 @@ Run the application with Redis using Docker Compose:
 
 ### 1️⃣ Start all services
 ```bash
-docker-compose up -d
+docker compose up -d
 ```
 
 This will start:
@@ -243,13 +243,13 @@ curl http://localhost:5000/get-responses?endpoint=/health
 
 ### 3️⃣ Stop services
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ### 4️⃣ View logs
 ```bash
-docker-compose logs -f app
-docker-compose logs -f redis
+docker compose logs -f app
+docker compose logs -f redis
 ```
 
 ---

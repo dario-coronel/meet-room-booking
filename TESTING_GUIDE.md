@@ -9,13 +9,13 @@
 ### Comandos:
 ```powershell
 # Levantar servicios (Redis + App)
-docker-compose up -d
+docker compose up -d
 
 # Verificar que estén corriendo
-docker-compose ps
+docker compose ps
 
 # Ver logs
-docker-compose logs -f app
+docker compose logs -f app
 
 # Probar endpoints públicos (sin autenticación)
 curl http://localhost:5000/health

@@ -21,7 +21,9 @@ def auth_token(client):
     """Register a test token and return authorization header."""
     test_token = "test-token-12345"
     # Mock Redis to accept the token
-    with patch("src.database.redis_client.redis_client.validate_token") as mock_validate:
+    with patch(
+        "src.database.redis_client.redis_client.validate_token"
+    ) as mock_validate:
         mock_validate.return_value = True
         return {"Authorization": f"Bearer {test_token}"}
 
@@ -56,7 +58,9 @@ def test_ping_endpoint_contains_timestamp(client):
 def test_get_responses_endpoint_returns_200(mock_validate, client):
     """Test that /get-responses returns status code 200."""
     mock_validate.return_value = True
-    response = client.get("/get-responses", headers={"Authorization": "Bearer test-token"})
+    response = client.get(
+        "/get-responses", headers={"Authorization": "Bearer test-token"}
+    )
     assert response.status_code == 200
 
 
@@ -64,7 +68,9 @@ def test_get_responses_endpoint_returns_200(mock_validate, client):
 def test_get_responses_returns_json(mock_validate, client):
     """Test that /get-responses returns valid JSON structure."""
     mock_validate.return_value = True
-    response = client.get("/get-responses", headers={"Authorization": "Bearer test-token"})
+    response = client.get(
+        "/get-responses", headers={"Authorization": "Bearer test-token"}
+    )
     data = json.loads(response.data)
 
     assert isinstance(data, dict)
@@ -79,7 +85,9 @@ def test_get_responses_returns_json(mock_validate, client):
 def test_get_responses_with_limit(mock_validate, client):
     """Test that /get-responses respects limit parameter."""
     mock_validate.return_value = True
-    response = client.get("/get-responses?limit=5", headers={"Authorization": "Bearer test-token"})
+    response = client.get(
+        "/get-responses?limit=5", headers={"Authorization": "Bearer test-token"}
+    )
     data = json.loads(response.data)
 
     assert response.status_code == 200
@@ -91,7 +99,10 @@ def test_get_responses_with_limit(mock_validate, client):
 def test_get_responses_with_endpoint_filter(mock_validate, client):
     """Test that /get-responses can filter by endpoint."""
     mock_validate.return_value = True
-    response = client.get("/get-responses?endpoint=/health", headers={"Authorization": "Bearer test-token"})
+    response = client.get(
+        "/get-responses?endpoint=/health",
+        headers={"Authorization": "Bearer test-token"},
+    )
     data = json.loads(response.data)
 
     assert response.status_code == 200
@@ -136,7 +147,9 @@ def test_get_responses_without_token_returns_401(client):
 
 def test_get_responses_with_invalid_token_returns_401(client):
     """Test that /get-responses returns 401 with invalid token."""
-    response = client.get("/get-responses", headers={"Authorization": "Bearer invalid-token"})
+    response = client.get(
+        "/get-responses", headers={"Authorization": "Bearer invalid-token"}
+    )
     assert response.status_code == 401
 
 
@@ -155,8 +168,10 @@ def test_clear_responses_endpoint(mock_clear, mock_validate, client):
     mock_validate.return_value = True
     mock_clear.return_value = True
 
-    response = client.delete("/clear-responses", headers={"Authorization": "Bearer test-token"})
-    
+    response = client.delete(
+        "/clear-responses", headers={"Authorization": "Bearer test-token"}
+    )
+
     assert response.status_code == 200
     data = json.loads(response.data)
     assert "message" in data
@@ -173,13 +188,13 @@ def test_register_token_endpoint(client):
     """Test that /register-token registers a token successfully."""
     with patch("src.database.redis_client.redis_client.save_token") as mock_save:
         mock_save.return_value = True
-        
+
         response = client.post(
             "/register-token",
             data=json.dumps({"token": "new-token-123", "expiration_seconds": 7200}),
-            content_type="application/json"
+            content_type="application/json",
         )
-        
+
         assert response.status_code == 201
         data = json.loads(response.data)
         assert data["message"] == "Token registered successfully"
@@ -192,9 +207,9 @@ def test_register_token_without_token_field_returns_400(client):
     response = client.post(
         "/register-token",
         data=json.dumps({"expiration_seconds": 3600}),
-        content_type="application/json"
+        content_type="application/json",
     )
-    
+
     assert response.status_code == 400
     data = json.loads(response.data)
     assert "error" in data
