@@ -52,9 +52,14 @@ docker-compose down
 
 # Reiniciar con reconstrucción de imágenes
 docker-compose up -d --build
+
+# Verificar que todo está funcionando correctamente
+./examples/test-docker-setup.sh
 ```
 
 > 💡 **Nota**: Para más opciones de ejecución (modo consola, instalación local, etc.), consulta las secciones detalladas a continuación.
+> 
+> 🧪 **Testing**: Usa el script `./examples/test-docker-setup.sh` para verificar que el setup de Docker está correcto.
 
 ---
 
