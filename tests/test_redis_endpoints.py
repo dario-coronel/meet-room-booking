@@ -88,7 +88,8 @@ def test_get_responses_with_endpoint_filter(mock_validate_token, client):
     """Test that /get-responses can filter by endpoint."""
     mock_validate_token.return_value = True
     response = client.get(
-        "/get-responses?endpoint=/health", headers={"Authorization": "Bearer test-token"}
+        "/get-responses?endpoint=/health",
+        headers={"Authorization": "Bearer test-token"},
     )
     data = json.loads(response.data)
 
@@ -165,13 +166,13 @@ def test_health_endpoint_does_not_require_token(client):
 def test_register_token_endpoint(mock_save_token, client):
     """Test that /register-token saves token successfully."""
     mock_save_token.return_value = True
-    
+
     response = client.post(
         "/register-token",
         data=json.dumps({"token": "test-token-123", "expiration_seconds": 3600}),
         content_type="application/json",
     )
-    
+
     assert response.status_code == 201
     data = json.loads(response.data)
     assert data["message"] == "Token registered successfully"
@@ -186,7 +187,7 @@ def test_register_token_without_token_returns_400(client):
         data=json.dumps({"expiration_seconds": 3600}),
         content_type="application/json",
     )
-    
+
     assert response.status_code == 400
     data = json.loads(response.data)
     assert "error" in data
@@ -199,11 +200,11 @@ def test_clear_responses_endpoint(mock_clear, mock_validate_token, client):
     """Test that /clear-responses deletes all responses successfully."""
     mock_validate_token.return_value = True
     mock_clear.return_value = True
-    
+
     response = client.delete(
         "/clear-responses", headers={"Authorization": "Bearer test-token"}
     )
-    
+
     assert response.status_code == 200
     data = json.loads(response.data)
     assert data["message"] == "All responses have been cleared successfully"
