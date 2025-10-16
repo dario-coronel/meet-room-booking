@@ -18,6 +18,8 @@
 - Docker instalado ([Descargar Docker](https://www.docker.com/get-started))
 - Docker Compose (incluido con Docker Desktop)
 
+> 📚 **Para una guía completa de Docker**: Ver [DOCKER.md](DOCKER.md) con instrucciones detalladas, troubleshooting y FAQ.
+
 ### Ejecutar el proyecto en 3 pasos
 
 La forma más rápida de ejecutar el proyecto es usando **Docker Compose**:
@@ -225,6 +227,8 @@ python run_web.py
 ## 🐳 Docker Compose Setup (Recomendado) ⭐
 
 **Esta es la forma más fácil y recomendada de ejecutar el proyecto**. Docker Compose levanta automáticamente Redis y la aplicación con una sola línea de comando.
+
+> 📖 **Documentación completa**: Ver [DOCKER.md](DOCKER.md) para guía detallada con más ejemplos y troubleshooting.
 
 ### 1️⃣ Iniciar todos los servicios
 ```bash
