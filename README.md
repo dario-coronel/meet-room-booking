@@ -12,6 +12,28 @@
 
 ---
 
+## ⚡ Quick Start with Docker Compose
+
+**The fastest way to get started:**
+
+```bash
+# Clone the repository
+git clone https://github.com/dario-coronel/meet-room-booking.git
+cd meet-room-booking
+
+# Start all services (Redis + App)
+docker compose up -d
+
+# Access the application
+# http://localhost:5000/health
+# http://localhost:5000/ping
+# http://localhost:5000/get-responses
+```
+
+📚 **¿Hablas español?** Lee la [**Guía completa de Docker Compose en español →**](DOCKER_SETUP_ES.md)
+
+---
+
 ## ⚡ Redis Integration & Monitoring
 
 La aplicación incluye integración completa con Redis para persistir y monitorear todas las peticiones a los endpoints de salud.
@@ -179,6 +201,8 @@ python run_web.py
 ---
 
 ## 🐳 Docker Compose Setup (Recommended)
+
+> 📚 **¿Hablas español?** Lee la [Guía completa de Docker Compose en español](DOCKER_SETUP_ES.md)
 
 Run the application with Redis using Docker Compose:
 
