@@ -12,6 +12,50 @@
 
 ---
 
+## 🚀 Quick Start
+
+### Prerequisitos
+- Docker instalado ([Descargar Docker](https://www.docker.com/get-started))
+- Docker Compose (incluido con Docker Desktop)
+
+### Ejecutar el proyecto en 3 pasos
+
+La forma más rápida de ejecutar el proyecto es usando **Docker Compose**:
+
+```bash
+# 1. Clonar el repositorio
+git clone https://github.com/dario-coronel/meet-room-booking.git
+cd meet-room-booking
+
+# 2. Iniciar todos los servicios (Redis + Aplicación)
+docker-compose up -d
+
+# 3. Verificar que está funcionando
+curl http://localhost:5000/health
+```
+
+¡Listo! ✅ La aplicación estará disponible en `http://localhost:5000` con Redis configurado automáticamente.
+
+### Comandos útiles
+
+```bash
+# Ver logs de la aplicación
+docker-compose logs -f app
+
+# Ver logs de Redis
+docker-compose logs -f redis
+
+# Detener los servicios
+docker-compose down
+
+# Reiniciar con reconstrucción de imágenes
+docker-compose up -d --build
+```
+
+> 💡 **Nota**: Para más opciones de ejecución (modo consola, instalación local, etc.), consulta las secciones detalladas a continuación.
+
+---
+
 ## ⚡ Redis Integration & Monitoring
 
 La aplicación incluye integración completa con Redis para persistir y monitorear todas las peticiones a los endpoints de salud.
@@ -178,20 +222,24 @@ python run_web.py
 
 ---
 
-## 🐳 Docker Compose Setup (Recommended)
+## 🐳 Docker Compose Setup (Recomendado) ⭐
 
-Run the application with Redis using Docker Compose:
+**Esta es la forma más fácil y recomendada de ejecutar el proyecto**. Docker Compose levanta automáticamente Redis y la aplicación con una sola línea de comando.
 
-### 1️⃣ Start all services
+### 1️⃣ Iniciar todos los servicios
 ```bash
+# Iniciar en modo background (detached)
 docker-compose up -d
+
+# O ver los logs en tiempo real
+docker-compose up
 ```
 
-This will start:
-- Redis container on port 6379
-- Application container on port 5000
+Esto iniciará:
+- 🔴 **Redis**: Container en puerto 6379 con persistencia de datos
+- 🐍 **Aplicación Flask**: Container en puerto 5000 conectado a Redis
 
-### 2️⃣ Access the endpoints
+### 2️⃣ Verificar que está funcionando
 ```bash
 # Health check
 curl http://localhost:5000/health
@@ -202,22 +250,96 @@ curl http://localhost:5000/ping
 # Get all stored requests
 curl http://localhost:5000/get-responses
 
-# Get requests with limit
+# Get requests con límite
 curl http://localhost:5000/get-responses?limit=10
 
-# Get requests for specific endpoint
+# Get requests por endpoint específico
 curl http://localhost:5000/get-responses?endpoint=/health
 ```
 
-### 3️⃣ Stop services
+### 3️⃣ Ver logs
 ```bash
-docker-compose down
+# Logs de todos los servicios
+docker-compose logs -f
+
+# Logs solo de la aplicación
+docker-compose logs -f app
+
+# Logs solo de Redis
+docker-compose logs -f redis
 ```
 
-### 4️⃣ View logs
+### 4️⃣ Detener los servicios
 ```bash
-docker-compose logs -f app
-docker-compose logs -f redis
+# Detener los containers (mantiene volúmenes)
+docker-compose down
+
+# Detener y eliminar volúmenes (borra datos de Redis)
+docker-compose down -v
+```
+
+### 5️⃣ Reconstruir después de cambios en el código
+```bash
+# Reconstruir imagen y reiniciar
+docker-compose up -d --build
+```
+
+### Arquitectura de Docker Compose
+```
+┌─────────────────────────────┐
+│   meet-room-app:5000        │
+│   (Flask Application)        │
+└──────────────┬──────────────┘
+               │ REDIS_HOST=redis
+               │ REDIS_PORT=6379
+               ▼
+┌─────────────────────────────┐
+│   meet-room-redis:6379      │
+│   (Redis Database)           │
+│   📁 Volume: redis-data      │
+└─────────────────────────────┘
+```
+
+### 🔧 Troubleshooting Docker Compose
+
+**Problema: Puerto 5000 ya en uso**
+```bash
+# Cambiar el puerto en docker-compose.yml
+# Modificar "5000:5000" a "8080:5000"
+# Luego reiniciar
+docker-compose down
+docker-compose up -d
+```
+
+**Problema: Container no inicia correctamente**
+```bash
+# Ver logs detallados
+docker-compose logs app
+
+# Verificar estado de los containers
+docker-compose ps
+
+# Reiniciar servicios
+docker-compose restart
+```
+
+**Problema: Cambios en el código no se reflejan**
+```bash
+# Reconstruir la imagen
+docker-compose build --no-cache
+docker-compose up -d
+```
+
+**Problema: Redis no conecta**
+```bash
+# Verificar que Redis está corriendo
+docker-compose ps redis
+
+# Verificar healthcheck
+docker inspect meet-room-redis | grep Health -A 10
+
+# Reiniciar solo Redis
+docker-compose restart redis
 ```
 
 ---
