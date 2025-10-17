@@ -20,7 +20,9 @@ def client():
 def auth_headers(client):
     """Create auth headers with a valid token."""
     # Mock the token validation to always return True
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=True):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=True
+    ):
         yield {"Authorization": "Bearer test-token-123"}
 
 
@@ -52,14 +54,18 @@ def test_ping_endpoint_contains_timestamp(client):
 
 def test_get_responses_endpoint_returns_200(client, auth_headers):
     """Test that /get-responses returns status code 200."""
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=True):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=True
+    ):
         response = client.get("/get-responses", headers=auth_headers)
         assert response.status_code == 200
 
 
 def test_get_responses_returns_json(client, auth_headers):
     """Test that /get-responses returns valid JSON structure."""
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=True):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=True
+    ):
         response = client.get("/get-responses", headers=auth_headers)
         data = json.loads(response.data)
 
@@ -73,7 +79,9 @@ def test_get_responses_returns_json(client, auth_headers):
 
 def test_get_responses_with_limit(client, auth_headers):
     """Test that /get-responses respects limit parameter."""
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=True):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=True
+    ):
         response = client.get("/get-responses?limit=5", headers=auth_headers)
         data = json.loads(response.data)
 
@@ -84,7 +92,9 @@ def test_get_responses_with_limit(client, auth_headers):
 
 def test_get_responses_with_endpoint_filter(client, auth_headers):
     """Test that /get-responses can filter by endpoint."""
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=True):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=True
+    ):
         response = client.get("/get-responses?endpoint=/health", headers=auth_headers)
         data = json.loads(response.data)
 
@@ -130,7 +140,9 @@ def test_get_responses_without_token_returns_401(client):
 
 def test_get_responses_with_invalid_token_returns_401(client):
     """Test that /get-responses returns 401 with invalid token."""
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=False):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=False
+    ):
         headers = {"Authorization": "Bearer invalid-token"}
         response = client.get("/get-responses", headers=headers)
         assert response.status_code == 401
@@ -142,13 +154,10 @@ def test_get_responses_with_invalid_token_returns_401(client):
 def test_register_token_success(client):
     """Test that /register-token successfully registers a token."""
     with patch("src.database.redis_client.redis_client.save_token", return_value=True):
-        payload = {
-            "token": "test-token-123",
-            "expiration_seconds": 3600
-        }
-        response = client.post("/register-token", 
-                              data=json.dumps(payload),
-                              content_type="application/json")
+        payload = {"token": "test-token-123", "expiration_seconds": 3600}
+        response = client.post(
+            "/register-token", data=json.dumps(payload), content_type="application/json"
+        )
         assert response.status_code == 201
         data = json.loads(response.data)
         assert data["message"] == "Token registered successfully"
@@ -158,9 +167,9 @@ def test_register_token_success(client):
 def test_register_token_without_token_field_returns_400(client):
     """Test that /register-token returns 400 without token field."""
     payload = {"expiration_seconds": 3600}
-    response = client.post("/register-token", 
-                          data=json.dumps(payload),
-                          content_type="application/json")
+    response = client.post(
+        "/register-token", data=json.dumps(payload), content_type="application/json"
+    )
     assert response.status_code == 400
     data = json.loads(response.data)
     assert "error" in data
@@ -169,8 +178,13 @@ def test_register_token_without_token_field_returns_400(client):
 
 def test_clear_responses_success(client, auth_headers):
     """Test that /clear-responses successfully clears all responses."""
-    with patch("src.middleware.auth_middleware.redis_client.validate_token", return_value=True):
-        with patch("src.database.redis_client.redis_client.clear_all_requests", return_value=True):
+    with patch(
+        "src.middleware.auth_middleware.redis_client.validate_token", return_value=True
+    ):
+        with patch(
+            "src.database.redis_client.redis_client.clear_all_requests",
+            return_value=True,
+        ):
             response = client.delete("/clear-responses", headers=auth_headers)
             assert response.status_code == 200
             data = json.loads(response.data)

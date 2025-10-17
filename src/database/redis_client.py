@@ -90,7 +90,9 @@ class RedisClient:
         try:
             # Store in a sorted set with timestamp as score
             key = f"requests:{endpoint}"
-            self.client.zadd(key, {json.dumps(data): datetime.now(timezone.utc).timestamp()})
+            self.client.zadd(
+                key, {json.dumps(data): datetime.now(timezone.utc).timestamp()}
+            )
 
             # Also store in a list for easy retrieval
             self.client.lpush("all_requests", json.dumps(data))
