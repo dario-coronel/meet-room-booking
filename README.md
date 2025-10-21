@@ -243,6 +243,68 @@ docker run -it meet-room-booking python -m src.main
 
 ---
 
+
+---
+
+## 🔐 Autenticación y Uso de Token JWT
+
+Algunos endpoints requieren autenticación mediante un token JWT registrado previamente en Redis.
+
+### 1️⃣ Registrar un token JWT
+
+Puedes generar un token en https://jwt.io/ y luego registrarlo en el sistema:
+
+**POST /register-token**
+
+```
+POST http://localhost:5000/register-token
+Content-Type: application/json
+
+{
+  "token": "<tu_token_jwt>",
+  "expiration_seconds": 3600  # Opcional, por defecto 1 hora
+}
+```
+
+Respuesta exitosa:
+```json
+{
+  "message": "Token registered successfully",
+  "token": "<tu_token_jwt>",
+  "expiration_seconds": 3600
+}
+```
+
+### 2️⃣ Usar el token en endpoints protegidos
+
+Agrega el header:
+
+```
+Authorization: Bearer <tu_token_jwt>
+```
+
+#### Ejemplo: Obtener requests almacenadas
+
+```
+GET http://localhost:5000/get-responses
+Authorization: Bearer <tu_token_jwt>
+```
+
+#### Ejemplo: Limpiar todas las respuestas
+
+```
+DELETE http://localhost:5000/clear-responses
+Authorization: Bearer <tu_token_jwt>
+```
+
+Si el token es inválido o no está registrado, recibirás:
+```json
+{
+  "error": "Invalid or missing token"
+}
+```
+
+---
 ## 🧪 Testing
 
 La suite de tests cubre funcionalidad completa del sistema:
