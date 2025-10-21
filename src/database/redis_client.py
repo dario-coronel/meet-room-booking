@@ -1,6 +1,6 @@
 import json
 import os
-from datetime import datetime
+from datetime import datetime, timezone
 from typing import Dict, List, Optional
 
 import redis
@@ -76,7 +76,7 @@ class RedisClient:
         if not self.is_connected():
             return None
 
-        timestamp = datetime.utcnow().isoformat()
+        timestamp = datetime.now(timezone.utc).isoformat()
         request_id = f"{endpoint}:{timestamp}"
 
         data = {
@@ -90,7 +90,9 @@ class RedisClient:
         try:
             # Store in a sorted set with timestamp as score
             key = f"requests:{endpoint}"
-            self.client.zadd(key, {json.dumps(data): datetime.utcnow().timestamp()})
+            self.client.zadd(
+                key, {json.dumps(data): datetime.now(timezone.utc).timestamp()}
+            )
 
             # Also store in a list for easy retrieval
             self.client.lpush("all_requests", json.dumps(data))

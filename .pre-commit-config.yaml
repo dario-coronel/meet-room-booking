@@ -1,9 +1,11 @@
 repos:
   - repo: https://github.com/psf/black
-    rev: 23.12.1  # usa la última versión estable
+    rev: 24.4.2  # usa la última versión estable
     hooks:
       - id: black
         language_version: python3
+        args: [--line-length=88]
+        files: src/ tests/
 
   - repo: https://github.com/PyCQA/isort
     rev: 5.12.0
