@@ -243,6 +243,68 @@ docker run -it meet-room-booking python -m src.main
 
 ---
 
+
+---
+
+## 🔐 Autenticación y Uso de Token JWT
+
+Algunos endpoints requieren autenticación mediante un token JWT registrado previamente en Redis.
+
+### 1️⃣ Registrar un token JWT
+
+Puedes generar un token en https://jwt.io/ y luego registrarlo en el sistema:
+
+**POST /register-token**
+
+```
+POST http://localhost:5000/register-token
+Content-Type: application/json
+
+{
+  "token": "<tu_token_jwt>",
+  "expiration_seconds": 3600  # Opcional, por defecto 1 hora
+}
+```
+
+Respuesta exitosa:
+```json
+{
+  "message": "Token registered successfully",
+  "token": "<tu_token_jwt>",
+  "expiration_seconds": 3600
+}
+```
+
+### 2️⃣ Usar el token en endpoints protegidos
+
+Agrega el header:
+
+```
+Authorization: Bearer <tu_token_jwt>
+```
+
+#### Ejemplo: Obtener requests almacenadas
+
+```
+GET http://localhost:5000/get-responses
+Authorization: Bearer <tu_token_jwt>
+```
+
+#### Ejemplo: Limpiar todas las respuestas
+
+```
+DELETE http://localhost:5000/clear-responses
+Authorization: Bearer <tu_token_jwt>
+```
+
+Si el token es inválido o no está registrado, recibirás:
+```json
+{
+  "error": "Invalid or missing token"
+}
+```
+
+---
 ## 🧪 Testing
 
 La suite de tests cubre funcionalidad completa del sistema:
@@ -305,10 +367,47 @@ El proyecto implementa patrones de diseño y mejores prácticas:
 
 ---
 
+
 # Meet Room Booking
 
 [![CI Pipeline](https://github.com/dario-coronel/meet-room-booking/actions/workflows/ci.yml/badge.svg)](https://github.com/dario-coronel/meet-room-booking/actions/workflows/ci.yml)
 [![Coverage](https://codecov.io/gh/dario-coronel/meet-room-booking/branch/main/graph/badge.svg)](https://codecov.io/gh/dario-coronel/meet-room-booking)
+
+
+## 🛡️ Seguridad automatizada con CodeQL
+
+Este proyecto implementa **análisis estático de seguridad** automatizado usando [CodeQL](https://codeql.github.com/) en el pipeline de GitHub Actions.
+
+- El workflow se encuentra en `.github/workflows/codeql.yml`.
+- CodeQL analiza el código fuente en cada push, pull request y semanalmente.
+- Detecta vulnerabilidades y malas prácticas en Python automáticamente.
+- Los resultados se pueden consultar en la pestaña **Security** y **Actions** del repositorio en GitHub.
+
+### Ejemplo de configuración:
+```yaml
+name: "CodeQL"
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '0 0 * * 0'
+jobs:
+  analyze:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        language: [python]
+    steps:
+    - uses: actions/checkout@v4
+    - uses: github/codeql-action/init@v3
+      with:
+        languages: ${{ matrix.language }}
+    - uses: github/codeql-action/autobuild@v3
+    - uses: github/codeql-action/analyze@v3
+```
+
 ---
 
 ## 📖 License
