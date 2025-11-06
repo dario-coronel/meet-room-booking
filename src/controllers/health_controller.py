@@ -42,10 +42,9 @@ def create_app():
             additional_data={"response_status": "ok"},
         )
 
-        # BUG INTENCIONAL: Devolviendo 500 en lugar de 200
         return (
-            jsonify({"status": "error", "timestamp": timestamp}),
-            500,
+            jsonify({"status": "ok", "timestamp": timestamp}),
+            200,
         )
 
     @app.route("/ping", methods=["GET"])
